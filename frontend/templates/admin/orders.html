@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Daftar Pesanan{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="card card-outline card-primary">
+    <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+      <h3 class="card-title mb-2 mb-md-0">
+        <i class="fas fa-box"></i> Daftar Pesanan
+      </h3>
+      <form method="get" class="form-inline d-flex flex-wrap gap-2">
+        <select name="device" class="form-select form-select-sm">
+          <option value="">Semua Perangkat</option>
+          {% for device in devices %}
+            <option value="{{ device.id }}" {% if device.id|stringformat:"s" == selected_device %}selected{% endif %}>
+              {{ device }}
+            </option>
+          {% endfor %}
+        </select>
+        <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari..." value="{{ search_query }}">
+        <button type="submit" class="btn btn-sm btn-primary">
+          <i class="fas fa-search"></i> Filter
+        </button>
+        <a href="{% url 'admin-orders' %}" class="btn btn-sm btn-secondary">Reset</a>
+      </form>
+    </div>
+
+    <div class="card-body">
+      {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+      {% elif orders %}
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-striped">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Perangkat</th>
+                <th>Kategori</th>
+                <th>Status</th>
+                <th>Customer</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.device }}</td>
+                <td>{{ order.category }}</td>
+                <td>
+                  {% if order.status == "Pending" %}
+                    <span class="badge bg-secondary">{{ order.status }}</span>
+                  {% elif order.status == "In Progress" %}
+                    <span class="badge bg-warning text-dark">{{ order.status }}</span>
+                  {% elif order.status == "Finished" %}
+                    <span class="badge bg-success">{{ order.status }}</span>
+                  {% elif order.status == "Cancelled" %}
+                    <span class="badge bg-danger">{{ order.status }}</span>
+                  {% else %}
+                    {{ order.status }}
+                  {% endif %}
+                </td>
+                <td>{{ order.created_by.username }}</td>
+                <td>
+                  <a href="{% url 'admin-order-detail' order.id %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i> Detail
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination justify-content-center mt-3">
+            {% if orders.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if selected_device %}device={{ selected_device }}&{% endif %}page={{ orders.previous_page_number }}">← Sebelumnya</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">← Sebelumnya</span></li>
+            {% endif %}
+
+            <li class="page-item disabled">
+              <span class="page-link">
+                Halaman {{ orders.number }} dari {{ orders.paginator.num_pages }}
+              </span>
+            </li>
+
+            {% if orders.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if selected_device %}device={{ selected_device }}&{% endif %}page={{ orders.next_page_number }}">Berikutnya →</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Berikutnya →</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+
+      {% else %}
+        <div class="alert alert-info">Tidak ditemukan pesanan yang sesuai.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

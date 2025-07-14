@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Detail Pesanan #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="card card-outline card-primary">
+    <div class="card-header">
+      <h3 class="card-title">
+        <i class="fas fa-clipboard-check"></i> Detail Pesanan #{{ order.id }}
+      </h3>
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="card-body">
+        {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+        {% elif success %}
+          <div class="alert alert-success">{{ success }}</div>
+        {% endif %}
+
+        <table class="table table-bordered">
+          <tr>
+            <th style="width: 30%;">Device</th>
+            <td>{{ order.device }}</td>
+          </tr>
+          <tr>
+            <th>Kategori</th>
+            <td>{{ order.category }}</td>
+          </tr>
+          <tr>
+            <th>Deskripsi</th>
+            <td>{{ order.description }}</td>
+          </tr>
+          <tr>
+            <th>Customer</th>
+            <td>{{ order.created_by.username }}</td>
+          </tr>
+          <tr>
+            <th>Dibuat Pada</th>
+            <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>
+              <select name="status" class="form-control">
+                {% for s in status_choices %}
+                  <option value="{{ s.0 }}" {% if s.0 == order.status %}selected{% endif %}>{{ s.1 }}</option>
+                {% endfor %}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>Teknisi</th>
+            <td>
+              <select name="technician" class="form-control">
+                <option value="" {% if not order.technician %}selected{% endif %}>Belum Ditugaskan</option>
+                {% for tech in technicians %}
+                  <option value="{{ tech.id }}" {% if order.technician.id == tech.id %}selected{% endif %}>
+                    {{ tech.username }}
+                  </option>
+                {% endfor %}
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card-footer d-flex justify-content-between">
+        <a href="{% url 'admin-orders' %}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-save"></i> Simpan Perubahan
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

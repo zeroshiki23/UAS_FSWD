@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Pengguna{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <h3 class="mb-4">Dashboard Pengguna</h3>
+
+  <div class="row mb-3">
+    <div class="col-md-3 col-sm-6 mb-2">
+      <a href="{% url 'user_orders_by_status' 'Pending' %}" class="btn btn-block bg-secondary text-white p-3">
+        <strong>Pending</strong>
+        <div class="h4 mt-2"><i class="fas fa-clock"></i> {{ stats.Pending }}</div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-2">
+      <a href="{% url 'user_orders_by_status' 'In Progress' %}" class="btn btn-block bg-warning text-white p-3">
+        <strong>In Progress</strong>
+        <div class="h4 mt-2"><i class="fas fa-tools"></i> {{ stats.In_Progress }}</div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-2">
+      <a href="{% url 'user_orders_by_status' 'Finished' %}" class="btn btn-block bg-success text-white p-3">
+        <strong>Finished</strong>
+        <div class="h4 mt-2"><i class="fas fa-check-circle"></i> {{ stats.Finished }}</div>
+      </a>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-2">
+      <a href="{% url 'user_orders_by_status' 'Cancelled' %}" class="btn btn-block bg-danger text-white p-3">
+        <strong>Cancelled</strong>
+        <div class="h4 mt-2"><i class="fas fa-times-circle"></i> {{ stats.Cancelled }}</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="text-end mb-3">
+    <a href="{% url 'order_form' %}" class="btn btn-primary">
+      <i class="fas fa-plus-circle"></i> Pesan Servis Baru
+    </a>
+  </div>
+</div>
+{% endblock %}

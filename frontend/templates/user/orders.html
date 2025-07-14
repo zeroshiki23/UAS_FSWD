@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Daftar Pesanan{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card card-outline card-primary">
+        <div class="card-header bg-primary text-white">
+          <h3 class="card-title">
+            <i class="fas fa-list-alt"></i> Daftar Pesanan
+          </h3>
+        </div>
+        <div class="card-body">
+          {% if orders %}
+            <table class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Device</th>
+                  <th>Kategori</th>
+                  <th>Status</th>
+                  <th>Dibuat</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                  <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.device }}</td>
+                    <td>{{ order.category }}</td>
+                    <td>
+                      {% if order.status == "Pending" %}
+                        <span class="badge bg-secondary">Pending</span>
+                      {% elif order.status == "In Progress" %}
+                        <span class="badge bg-warning text-dark">In Progress</span>
+                      {% elif order.status == "Finished" %}
+                        <span class="badge bg-success">Finished</span>
+                      {% elif order.status == "Cancelled" %}
+                        <span class="badge bg-danger">Cancelled</span>
+                      {% else %}
+                        {{ order.status }}
+                      {% endif %}
+                    </td>
+                    <td>{{ order.created_at|date:"d M Y, H:i" }}</td>
+                    <td>
+                      <a href="{% url 'user_order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-info-circle"></i> Detail
+                      </a>
+                      <a href="{% url 'user_order_history' order.id %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-history"></i> Riwayat
+                      </a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <div class="alert alert-info mb-0">Belum ada pesanan.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

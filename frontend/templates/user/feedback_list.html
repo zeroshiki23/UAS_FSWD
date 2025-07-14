@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Daftar Feedback{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="card-title"><i class="fas fa-star"></i> Daftar Feedback Saya</h3>
+        </div>
+
+        <div class="card-body">
+          <a href="{% url 'user_feedback_form' %}" class="btn btn-success mb-3">
+            <i class="fas fa-plus"></i> Kirim Feedback Baru
+          </a>
+
+          {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+          {% elif feedbacks %}
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Device</th>
+                    <th>Rating</th>
+                    <th>Komentar</th>
+                    <th>Tanggal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for fb in feedbacks %}
+                    <tr>
+                      <td>{{ fb.order.device }}</td>
+                      <td>{{ fb.rating }} ⭐</td>
+                      <td>{{ fb.comment|default:"-" }}</td>
+                      <td>{{ fb.submitted_at|date:"d M Y, H:i" }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="alert alert-info">Kamu belum pernah mengirim feedback.</div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

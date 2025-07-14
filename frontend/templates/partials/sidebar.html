@@ -1,0 +1,83 @@
+{% load static %}
+<!-- Sidebar user panel -->
+<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+  <div class="image">
+    <i class="fas fa-user-circle fa-2x text-white"></i>
+  </div>
+  <div class="info">
+    <a href="#" class="d-block text-white">{{ request.user.username }}</a>
+  </div>
+</div>
+
+<!-- Sidebar Menu -->
+<nav class="mt-2">
+  <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+    
+    {% if request.user.is_authenticated %}
+      {% if request.user.is_staff %}
+        <li class="nav-header">ADMIN</li>
+        <li class="nav-item">
+          <a href="{% url 'admin-dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'admin-dashboard' %}active{% endif %}">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'admin-orders' %}" class="nav-link {% if request.resolver_match.url_name == 'admin-orders' %}active{% endif %}">
+            <i class="nav-icon fas fa-list"></i>
+            <p>Daftar Pesanan</p>
+          </a>
+        </li>
+        <li class="nav-item mb-2">
+          <a href="{% url 'admin-feedback-list' %}" class="nav-link text-white">
+            <i class="fas fa-comment-dots me-1"></i> Feedback Pengguna
+          </a>
+        </li>
+
+      
+      {% else %}
+        <li class="nav-header">PENGGUNA</li>
+        <li class="nav-item">
+          <a href="{% url 'dashboard_user' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard_user' %}active{% endif %}">
+            <i class="nav-icon fas fa-home"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'user_orders' %}" class="nav-link {% if request.resolver_match.url_name == 'user_orders' %}active{% endif %}">
+            <i class="nav-icon fas fa-clipboard-list"></i>
+            <p>Daftar Pesanan</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'user_feedback_form' %}" class="nav-link {% if request.resolver_match.url_name == 'user_feedback_form' %}active{% endif %}">
+            <i class="nav-icon fas fa-comment-dots"></i>
+            <p>Kirim Feedback</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'user_feedback_list' %}" class="nav-link {% if request.resolver_match.url_name == 'user_feedback_list' %}active{% endif %}">
+            <i class="nav-icon fas fa-star"></i>
+            <p>Feedback Saya</p>
+          </a>
+        </li>
+      {% endif %}
+      
+      <li class="nav-item mt-2">
+        <a href="{% url 'logout' %}" class="nav-link">
+          <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
+          <p>Logout</p>
+        </a>
+      </li>
+
+    {% else %}
+      <li class="nav-item">
+        <a href="{% url 'login' %}" class="nav-link">
+          <i class="nav-icon fas fa-sign-in-alt text-success"></i>
+          <p>Login</p>
+        </a>
+      </li>
+    {% endif %}
+    
+  </ul>
+</nav>
